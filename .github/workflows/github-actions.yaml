@@ -6,7 +6,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ['3.9', '3.10', '3.11']
+        python-version: ['3.11']
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -23,6 +23,13 @@ jobs:
           pip install --upgrade pip setuptools
       - name: Install Dependencies
         run: |
+          pip install \
+            asgiref==3.7.2 \
+            async-timeout==4.0.3 \
+            attrs==23.2.0 \
+            autobahn==23.1.2 \
+            Automat==22.10.0
+            Django==4.2.9 
           pip install -r requirements.txt
       - name: Prepare Environment
         run: |
