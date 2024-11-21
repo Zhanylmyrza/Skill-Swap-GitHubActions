@@ -14,19 +14,15 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libpq-dev
       - name: Upgrade pip and setuptools
         run: |
-          python3 -m pip install --upgrade pip setuptools
+          pip install --upgrade pip setuptools
       - name: Install Dependencies
         run: |
-          python3 -m pip install --upgrade pip
-          pip install \
-            asgiref==3.7.2 \
-            async-timeout==4.0.3 \
-            attrs==23.2.0 \
-            autobahn==23.1.2 \
-            Automat==22.10.0
-            Django==4.2.9 
           pip install -r requirements.txt
       - name: Prepare Environment
         run: |
@@ -34,12 +30,4 @@ jobs:
           echo "SECRET_KEY = 'django-insecure-dummy-secret'" > ./auth_system/secrets.py
       - name: Run Tests
         run: |
-          python3 manage.py test
-        shell: bash
-        env:
-          pythonLocation: /opt/hostedtoolcache/Python/3.8.18/x64
-          PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.8.18/x64/lib/pkgconfig
-          Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.8.18/x64
-          Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.8.18/x64
-          Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.8.18/x64
-          LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.18/x64/lib
+          python manage.py test
