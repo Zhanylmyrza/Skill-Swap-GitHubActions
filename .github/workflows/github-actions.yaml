@@ -7,16 +7,7 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: ['3.11']
-    services:
-      postgres:
-        image: postgres:13
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
-        python-version: ['3.11']
+    
     services:
       postgres:
         image: postgres:13
