@@ -26,6 +26,7 @@ jobs:
             attrs==23.2.0 \
             autobahn==23.1.2 \
             Automat==22.10.0
+            Django==4.2.9 
           pip install -r requirements.txt
       - name: Prepare Environment
         run: |
