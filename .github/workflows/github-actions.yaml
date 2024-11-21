@@ -24,9 +24,9 @@ jobs:
             asgiref==3.7.2 \
             async-timeout==4.0.3 \
             attrs==23.2.0 \
-            autobahn==23.1.2 \  # Use a newer compatible version
-            Automat==22.10.0 \
-            -r requirements.txt
+            autobahn==23.1.2 \
+            Automat==22.10.0
+          pip install -r requirements.txt
       - name: Prepare Environment
         run: |
           cd ./backend
