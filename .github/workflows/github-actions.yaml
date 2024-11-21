@@ -31,7 +31,6 @@ jobs:
             attrs==23.2.0 \
             autobahn==22.10.4 \
             Automat==22.10.0 \
-            # Install remaining dependencies from requirements.txt
             -r requirements.txt
       - name: Prepare Environment
         run: |
