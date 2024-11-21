@@ -24,8 +24,15 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install -r requirements.txt --use-deprecated=legacy-resolver
-
+          python3 -m pip install --upgrade pip
+          pip install \
+            asgiref==3.7.2 \
+            async-timeout==4.0.3 \
+            attrs==23.2.0 \
+            autobahn==22.10.4 \
+            Automat==22.10.0 \
+            # Install remaining dependencies from requirements.txt
+            -r requirements.txt
       - name: Prepare Environment
         run: |
           cd ./backend
