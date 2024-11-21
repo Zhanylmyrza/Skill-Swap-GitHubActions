@@ -91,10 +91,10 @@ ASGI_APPLICATION = "auth_system.asgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": env.str("DB_NAME", default="diplomka"),
-        "USER": env.str("DB_USER", default="postgres"),
-        "PASSWORD": env.str("DB_PASSWORD", default="A78J79Zh01"),
-        "HOST": env.str("DB_HOST", default="localhost"),
+        "NAME": secrets.DB_NAME,
+        "USER": secrets.DB_USER,
+        "PASSWORD": secrets.DB_PASSWORD,
+        "HOST": secrets.DB_HOST,
     }
 }
 
