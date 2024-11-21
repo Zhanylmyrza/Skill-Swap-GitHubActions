@@ -1,39 +1,79 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [pull_request, push]
+
 jobs:
   run_unittests:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ['3.8', '3.9', '3.10']
+        python-version: ['3.11']
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        python-version: ['3.11']
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libpq-dev
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libpq-dev
+
+      - name: Upgrade pip and setuptools
+        run: |
+          pip install --upgrade pip setuptools
+          pip install --upgrade pip setuptools
+
       - name: Install Dependencies
         run: |
-          python3 -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Run Tests
+          pip install --prefer-binary -r requirements.txt
+
+          pip install --prefer-binary -r requirements.txt
+
+      - name: Prepare Environment
         run: |
           cd ./backend
           echo "SECRET_KEY = 'django-insecure-dummy-secret'" > ./auth_system/secrets.py
-          python3 manage.py test
-      # - name: Update passed icon
-      #   uses: Sibz/github-status-action@v1
-      #   with: 
-      #     authToken: ${{secrets.GIT_TOKEN}}
-      #     context: 'CI CHECK'
-      #     description: 'Passed'
-      #     state: 'success'
-      #     sha: ${{github.event.pull_request.head.sha || github.sha}}
-      # - name: Check coverage
-      #   run: |
-      #     python3 coverage_cicd.py
-      #   env:
-      #     COVERAGE_THRESHOLD: ${{vars.COVERAGE_THRESHOLD}}
+          echo "DATABASES = {
+              'default': {
+                  'ENGINE': 'django.db.backends.postgresql',
+                  'NAME': 'test_db',
+                  'USER': 'postgres',
+                  'PASSWORD': 'postgres',
+                  'HOST': 'localhost',
+                  'PORT': '5432',
+              }
+          }" > ./auth_system/secrets.py
+
+      - name: Run Tests
+        run: |
+          cd ./backend
+          python manage.py test
