@@ -3,14 +3,6 @@ from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-# class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-#     @classmethod
-#     def get_token(cls, user):
-#         token = super().get_token(user)
-#         token["user_id"] = user.id
-#         return token
-
 
 User = get_user_model()
 

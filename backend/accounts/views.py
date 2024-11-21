@@ -11,11 +11,6 @@ from rest_framework.response import Response
 from django.http import HttpRequest
 
 
-# from rest_framework_simplejwt.views import TokenObtainPairView
-# class CustomTokenObtainPairView(TokenObtainPairView):
-#     serializer_class = CustomTokenObtainPairSerializer
-
-
 class PersonListView(generics.ListAPIView):
     # queryset = UserAccount.objects.all()
     serializer_class = ProfileSerializer
