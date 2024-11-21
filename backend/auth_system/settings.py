@@ -8,6 +8,7 @@ from decouple import config
 # from telnetlib import AUTHENTICATION
 
 from environs import Env
+from . import secrets
 
 env = Env()
 env.read_env()
@@ -15,10 +16,7 @@ env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = env.str(
-    "SECRET_KEY",
-    default="django-insecure-0m*%6s^7)i$yz@#fiu$nx+7qfs(p8m%72j8_m$v&24cryi8%e#",
-)
+SECRET_KEY = secrets.SECRET_KEY
 DEBUG = env.bool("DEBUG", default=True)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
