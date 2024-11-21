@@ -77,37 +77,3 @@ jobs:
           python manage.py test
           
 
-# name: GitHub Actions CI
-# on: [pull_request]
-# jobs:
-#   run_unittests:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       max-parallel: 4
-#       matrix:
-#         python-version: ['3.11']
-#     steps:
-#       - name: Check out repository code
-#         uses: actions/checkout@v3
-#       - name: Set up Python ${{ matrix.python-version }}
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: ${{ matrix.python-version }}
-#       - name: Install system dependencies
-#         run: |
-#           sudo apt-get update
-#           sudo apt-get install -y build-essential libpq-dev
-#       - name: Upgrade pip and setuptools
-#         run: |
-#           pip install --upgrade pip setuptools
-#       - name: Install Dependencies
-#         run: |
-#           pip install --prefer-binary -r requirements.txt
-#       - name: Prepare Environment
-#         run: |
-#           cd ./backend
-#           echo "SECRET_KEY = 'django-insecure-dummy-secret'" > ./auth_system/secrets.py
-#       - name: Run Tests
-#         run: |
-#           cd ./backend
-#           python manage.py test
