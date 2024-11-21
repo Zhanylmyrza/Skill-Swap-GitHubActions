@@ -16,6 +16,16 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: test_db
+        python-version: ['3.11']
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -30,12 +40,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libpq-dev
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libpq-dev
+
       - name: Upgrade pip and setuptools
         run: |
+          pip install --upgrade pip setuptools
           pip install --upgrade pip setuptools
 
       - name: Install Dependencies
         run: |
+          pip install --prefer-binary -r requirements.txt
+
           pip install --prefer-binary -r requirements.txt
 
       - name: Prepare Environment
