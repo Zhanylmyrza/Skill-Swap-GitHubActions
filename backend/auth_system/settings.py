@@ -8,7 +8,15 @@ from decouple import config
 # from telnetlib import AUTHENTICATION
 
 from environs import Env
-from . import secrets
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+SECRET_KEY = "django-insecure-0m*%6s^7)i$yz@#fiu$nx+7qfs(p8m%72j8_m$v&24cryi8%e#"
+
+# try:
+#     from .secrets import SECRET_KEY
+# except ImportError:
+#     SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dummy-secret')
 
 env = Env()
 env.read_env()
@@ -16,7 +24,9 @@ env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = secrets.SECRET_KEY
+
+
+    
 DEBUG = env.bool("DEBUG", default=True)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
@@ -95,7 +105,9 @@ DATABASES = {
         "USER": env.str("DB_USER", default="postgres"),
         "PASSWORD": env.str("DB_PASSWORD", default="A78J79Zh01"),
         "HOST": env.str("DB_HOST", default="localhost"),
+        'PORT': env.str('POSTGRES_PORT', default='5432'),
     }
+    
 }
 
 
