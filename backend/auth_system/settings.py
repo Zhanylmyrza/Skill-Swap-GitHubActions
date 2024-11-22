@@ -105,6 +105,7 @@ DATABASES = {
         "USER": env.str("DB_USER", default="postgres"),
         "PASSWORD": env.str("DB_PASSWORD", default="A78J79Zh01"),
         "HOST": env.str("DB_HOST", default="localhost"),
+        'PORT': env.str('POSTGRES_PORT', default='5432'),
     }
     
 }
