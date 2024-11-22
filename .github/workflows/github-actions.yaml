@@ -13,10 +13,10 @@ jobs:
     
     services:
       postgres:
-        image: postgres:latest
+        image: postgres:14
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: A78J79Zh01
           POSTGRES_DB: diplomka
         ports:
           - 5432:5432
