@@ -1,5 +1,7 @@
 name: GitHub Actions CI
-on: [pull_request, push]
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on: [pull_request]
 jobs:
   run_unittests:
     runs-on: ubuntu-latest
@@ -44,30 +46,38 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install --prefer-binary -r requirements.txt
-
-          pip install --prefer-binary -r requirements.txt
-
-      - name: Prepare Environment
-        run: |
-          cd ./backend
-          echo "SECRET_KEY = \"django-insecure-dummy-secret\"" > ./auth_system/secrets.py
-          cat ./auth_system/secrets.py  # Для проверки содержимого
-          ls -la ./auth_system/  # Для проверки создания файла
           
-          echo "DATABASES = {
-              'default': {
-                  'ENGINE': 'django.db.backends.postgresql',
-                  'NAME': 'test_db',
-                  'USER': 'postgres',
-                  'PASSWORD': 'postgres',
-                  'HOST': 'localhost',
-                  'PORT': '5432',
-              }
-          }" > ./auth_system/secrets.py
-
-      - name: Run Tests
+      - name: Prepare Environment and Run Tests
         run: |
-          cd ./backend
-          python manage.py test
+            cd ./backend
+            mkdir -p auth_system
+            echo "SECRET_KEY = 'django-insecure-dummy-secret'" > auth_system/secrets.py
+            export SECRET_KEY='django-insecure-dummy-secret'
+            ls -la auth_system/  # Проверяем создание файла
+            cat auth_system/secrets.py  # Проверяем содержимое файла
+            python3 manage.py test
+
+      # - name: Prepare Environment
+      #   run: |
+      #     cd ./backend
+      #     echo "SECRET_KEY = \"django-insecure-dummy-secret\"" > ./auth_system/secrets.py
+      #     cat ./auth_system/secrets.py  # Для проверки содержимого
+      #     ls -la ./auth_system/  # Для проверки создания файла
+          
+      #     echo "DATABASES = {
+      #         'default': {
+      #             'ENGINE': 'django.db.backends.postgresql',
+      #             'NAME': 'test_db',
+      #             'USER': 'postgres',
+      #             'PASSWORD': 'postgres',
+      #             'HOST': 'localhost',
+      #             'PORT': '5432',
+      #         }
+      #     }" > ./auth_system/secrets.py
+
+      # - name: Run Tests
+      #   run: |
+      #     cd ./backend
+      #     python manage.py test
           
 
