@@ -25,8 +25,6 @@ env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
-    
 DEBUG = env.bool("DEBUG", default=True)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
@@ -105,9 +103,8 @@ DATABASES = {
         "USER": env.str("DB_USER", default="postgres"),
         "PASSWORD": env.str("DB_PASSWORD", default="A78J79Zh01"),
         "HOST": env.str("DB_HOST", default="localhost"),
-        'PORT': env.str('POSTGRES_PORT', default='5432'),
+        "PORT": env.str("POSTGRES_PORT", default="5432"),
     }
-    
 }
 
 
