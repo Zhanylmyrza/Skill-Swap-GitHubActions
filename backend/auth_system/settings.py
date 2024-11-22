@@ -16,7 +16,14 @@ env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 SECRET_KEY = secrets.SECRET_KEY
+try:
+    from .auth_system.secrets import SECRET_KEY
+except ImportError:
+    print("Unable to import secrets.py")
+    raise
+    
 DEBUG = env.bool("DEBUG", default=True)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
