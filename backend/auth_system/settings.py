@@ -11,10 +11,12 @@ from environs import Env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-try:
-    from .secrets import SECRET_KEY
-except ImportError:
-    SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dummy-secret')
+SECRET_KEY = "django-insecure-0m*%6s^7)i$yz@#fiu$nx+7qfs(p8m%72j8_m$v&24cryi8%e#"
+
+# try:
+#     from .secrets import SECRET_KEY
+# except ImportError:
+#     SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dummy-secret')
 
 env = Env()
 env.read_env()
