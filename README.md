@@ -2,8 +2,7 @@
 
 
 ![action status](https://github.com/Zhanylmyrza/Skill-Swap-GitHubActions/actions/workflows/github-actions.yaml/badge.svg)
-![coverage status](https://gist.github.com/Zhanylmyrza/3c81ec8e804b0ea9c040e305a036a806/raw/coverage.svg)
-
+![Coverage Status](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Zhanylmyrza/3c81ec8e804b0ea9c040e305a036a806/raw/coverage.json)
 
 
 
