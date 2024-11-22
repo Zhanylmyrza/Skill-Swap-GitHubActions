@@ -25,8 +25,6 @@ env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
-    
 DEBUG = env.bool("DEBUG", default=True)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
@@ -108,6 +106,7 @@ DATABASES = {
         'PORT': env.str('POSTGRES_PORT', default='5432'),
     }
     
+
 }
 
 
