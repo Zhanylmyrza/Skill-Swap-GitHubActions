@@ -2,6 +2,7 @@ name: GitHub Actions CI
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
 on: [pull_request]
+
 jobs:
   run_unittests:
     runs-on: ubuntu-latest
@@ -9,10 +10,12 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: ['3.11']
+    
     services:
       postgres:
         image: postgres:latest
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: diplomka
         ports:
@@ -22,16 +25,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-  
-    # services:
-    #   postgres:
-    #     image: postgres:13
-    #     ports:
-    #       - 5432:5432
-    #     env:
-    #       POSTGRES_USER: postgres
-    #       POSTGRES_PASSWORD: postgres
-    #       POSTGRES_DB: test_db
+
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -46,14 +40,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libpq-dev
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential libpq-dev
-
       - name: Upgrade pip and setuptools
         run: |
-          pip install --upgrade pip setuptools
           pip install --upgrade pip setuptools
 
       - name: Install Dependencies
@@ -61,36 +49,132 @@ jobs:
           pip install --prefer-binary -r requirements.txt
           
       - name: Prepare Environment and Run Tests
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: A78J79Zh01
+          POSTGRES_DB: diplomka
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
         run: |
-            cd ./backend
-            mkdir -p auth_system
-            echo "SECRET_KEY = 'django-insecure-dummy-secret'" > auth_system/secrets.py
-            export SECRET_KEY='django-insecure-dummy-secret'
-            ls -la auth_system/  # Проверяем создание файла
-            cat auth_system/secrets.py  # Проверяем содержимое файла
-            python3 manage.py test
-
-      # - name: Prepare Environment
-      #   run: |
-      #     cd ./backend
-      #     echo "SECRET_KEY = \"django-insecure-dummy-secret\"" > ./auth_system/secrets.py
-      #     cat ./auth_system/secrets.py  # Для проверки содержимого
-      #     ls -la ./auth_system/  # Для проверки создания файла
+          cd ./backend
+          mkdir -p auth_system
           
-      #     echo "DATABASES = {
-      #         'default': {
-      #             'ENGINE': 'django.db.backends.postgresql',
-      #             'NAME': 'test_db',
-      #             'USER': 'postgres',
-      #             'PASSWORD': 'postgres',
-      #             'HOST': 'localhost',
-      #             'PORT': '5432',
-      #         }
-      #     }" > ./auth_system/secrets.py
+          # Create secrets.py with database configuration
+          echo "
+          SECRET_KEY = 'django-insecure-dummy-secret'
+          
+          DATABASES = {
+              'default': {
+                  'ENGINE': 'django.db.backends.postgresql',
+                  'NAME': '${{ env.POSTGRES_DB }}',
+                  'USER': '${{ env.POSTGRES_USER }}',
+                  'PASSWORD': '${{ env.POSTGRES_PASSWORD }}',
+                  'HOST': '${{ env.POSTGRES_HOST }}',
+                  'PORT': '${{ env.POSTGRES_PORT }}',
+              }
+          }
+          " > auth_system/secrets.py
+          
+          # Run specific tests as you do locally
+          python manage.py test accounts.tests
 
-      # - name: Run Tests
-      #   run: |
-      #     cd ./backend
-      #     python manage.py test
+
+
+          
+
+# name: GitHub Actions CI
+# run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+# on: [pull_request]
+# jobs:
+#   run_unittests:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       max-parallel: 4
+#       matrix:
+#         python-version: ['3.11']
+#     services:
+#       postgres:
+#         image: postgres:latest
+#         env:
+#           POSTGRES_PASSWORD: postgres
+#           POSTGRES_DB: diplomka
+#         ports:
+#           - 5432:5432
+#         options: >-
+#           --health-cmd pg_isready
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
+  
+#     # services:
+#     #   postgres:
+#     #     image: postgres:13
+#     #     ports:
+#     #       - 5432:5432
+#     #     env:
+#     #       POSTGRES_USER: postgres
+#     #       POSTGRES_PASSWORD: postgres
+#     #       POSTGRES_DB: test_db
+#     steps:
+#       - name: Check out repository code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Python ${{ matrix.python-version }}
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: ${{ matrix.python-version }}
+
+#       - name: Install system dependencies
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y build-essential libpq-dev
+
+#       - name: Install system dependencies
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y build-essential libpq-dev
+
+#       - name: Upgrade pip and setuptools
+#         run: |
+#           pip install --upgrade pip setuptools
+#           pip install --upgrade pip setuptools
+
+#       - name: Install Dependencies
+#         run: |
+#           pip install --prefer-binary -r requirements.txt
+          
+#       - name: Prepare Environment and Run Tests
+#         run: |
+#             cd ./backend
+#             mkdir -p auth_system
+#             echo "SECRET_KEY = 'django-insecure-dummy-secret'" > auth_system/secrets.py
+#             export SECRET_KEY='django-insecure-dummy-secret'
+#             ls -la auth_system/  # Проверяем создание файла
+#             cat auth_system/secrets.py  # Проверяем содержимое файла
+#             python3 manage.py test
+
+#       # - name: Prepare Environment
+#       #   run: |
+#       #     cd ./backend
+#       #     echo "SECRET_KEY = \"django-insecure-dummy-secret\"" > ./auth_system/secrets.py
+#       #     cat ./auth_system/secrets.py  # Для проверки содержимого
+#       #     ls -la ./auth_system/  # Для проверки создания файла
+          
+#       #     echo "DATABASES = {
+#       #         'default': {
+#       #             'ENGINE': 'django.db.backends.postgresql',
+#       #             'NAME': 'test_db',
+#       #             'USER': 'postgres',
+#       #             'PASSWORD': 'postgres',
+#       #             'HOST': 'localhost',
+#       #             'PORT': '5432',
+#       #         }
+#       #     }" > ./auth_system/secrets.py
+
+#       # - name: Run Tests
+#       #   run: |
+#       #     cd ./backend
+#       #     python manage.py test
           
 
