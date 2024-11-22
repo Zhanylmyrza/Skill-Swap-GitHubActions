@@ -8,7 +8,13 @@ from decouple import config
 # from telnetlib import AUTHENTICATION
 
 from environs import Env
-from . import secrets
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+try:
+    from .secrets import SECRET_KEY
+except ImportError:
+    SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dummy-secret')
 
 env = Env()
 env.read_env()
@@ -17,12 +23,7 @@ env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = secrets.SECRET_KEY
-try:
-    from .auth_system.secrets import SECRET_KEY
-except ImportError:
-    print("Unable to import secrets.py")
-    raise
+
     
 DEBUG = env.bool("DEBUG", default=True)
 
