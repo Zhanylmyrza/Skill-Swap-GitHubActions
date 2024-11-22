@@ -50,7 +50,10 @@ jobs:
       - name: Prepare Environment
         run: |
           cd ./backend
-          echo "SECRET_KEY = 'django-insecure-dummy-secret'" > ./auth_system/secrets.py
+          echo "SECRET_KEY = \"django-insecure-dummy-secret\"" > ./auth_system/secrets.py
+          cat ./auth_system/secrets.py  # Для проверки содержимого
+          ls -la ./auth_system/  # Для проверки создания файла
+          
           echo "DATABASES = {
               'default': {
                   'ENGINE': 'django.db.backends.postgresql',
