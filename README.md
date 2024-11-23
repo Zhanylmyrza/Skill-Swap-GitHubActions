@@ -8,5 +8,4 @@
 Demonstration github actions in action
 
 ![Снимок экрана 2024-11-21 170526](https://github.com/user-attachments/assets/ca5dd484-8976-4ee7-9f11-46e11f432b1d)
-![image](https://github.com/user-attachments/assets/3469ef6e-13d1-42e0-ad65-2890695e5c71)
 
