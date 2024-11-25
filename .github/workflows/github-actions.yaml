@@ -77,7 +77,8 @@ jobs:
           
           # Run specific tests as you do locally
           python manage.py test accounts.tests
-        -name: Check coverage
+      - name: Check coverage
+        run: |
           python coverage_cicd.py
 
 
