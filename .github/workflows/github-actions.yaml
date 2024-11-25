@@ -1,108 +1,3 @@
-# name: GitHub Actions CI
-# run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-
-# on: [pull_request]
-
-# jobs:
-#   run_unittests:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       max-parallel: 4
-#       matrix:
-#         python-version: ['3.11']
-    
-#     services:
-#       postgres:
-#         image: postgres:14
-#         env:
-#           POSTGRES_USER: postgres
-#           POSTGRES_PASSWORD: A78J79Zh01
-#           POSTGRES_DB: diplomka
-#         ports:
-#           - 5432:5432
-#         options: >-
-#           --health-cmd pg_isready
-#           --health-interval 10s
-#           --health-timeout 5s
-#           --health-retries 5
-
-#     steps:
-#       - name: Check out repository code
-#         uses: actions/checkout@v3
-
-#       - name: Set up Python ${{ matrix.python-version }}
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: ${{ matrix.python-version }}
-
-#       - name: Install system dependencies
-#         run: |
-#           sudo apt-get update
-#           sudo apt-get install -y build-essential libpq-dev
-
-#       - name: Upgrade pip and setuptools
-#         run: |
-#           pip install --upgrade pip setuptools
-
-#       - name: Install Dependencies
-#         run: |
-#           pip install --prefer-binary -r requirements.txt
-          
-#       - name: Prepare Environment and Run Tests
-#         env:
-#           POSTGRES_USER: postgres
-#           POSTGRES_PASSWORD: A78J79Zh01
-#           POSTGRES_DB: diplomka
-#           POSTGRES_HOST: localhost
-#           POSTGRES_PORT: 5432
-#         run: |
-#           cd ./backend
-#           mkdir -p auth_system
-          
-#           # Create secrets.py with database configuration
-#           echo "
-#           SECRET_KEY = 'django-insecure-dummy-secret'
-          
-#           DATABASES = {
-#               'default': {
-#                   'ENGINE': 'django.db.backends.postgresql',
-#                   'NAME': '${{ env.POSTGRES_DB }}',
-#                   'USER': '${{ env.POSTGRES_USER }}',
-#                   'PASSWORD': '${{ env.POSTGRES_PASSWORD }}',
-#                   'HOST': '${{ env.POSTGRES_HOST }}',
-#                   'PORT': '${{ env.POSTGRES_PORT }}',
-#               }
-#           }
-#           " > auth_system/secrets.py
-          
-#           # Run specific tests as you do locally
-#           python manage.py test accounts.tests
-
-      
-#       - name: Check coverage
-#         env:
-#           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-#           GIST_ID: ${{ secrets.GIST_ID }}
-          
-#         run: |
-#           cd ./backend
-#           mkdir -p auth_system
-          
-#           # Create secrets.py safely
-#           echo "
-#           SECRET_KEY = '${{ secrets.DJANGO_SECRET }}'
-#           " > auth_system/secrets.py
-          
-#           # Create .env file for GitHub token and Gist ID
-#           echo "GITHUB_TOKEN=${{ secrets.GH_TOKEN }}" > .env
-#           echo "GITHUB_GIST_ID=${{ secrets.GIST_ID }}" >> .env
-          
-#           # Run coverage script
-#           python coverage_cicd.py
-
-
-
-
 name: GitHub Actions CI
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
@@ -121,7 +16,7 @@ jobs:
         image: postgres:14
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_PASSWORD: A78J79Zh01
           POSTGRES_DB: diplomka
         ports:
           - 5432:5432
@@ -132,22 +27,63 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out repository code
+        uses: actions/checkout@v3
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libpq-dev
+
+      - name: Upgrade pip and setuptools
+        run: |
+          pip install --upgrade pip setuptools
+
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip setuptools
           pip install --prefer-binary -r requirements.txt
           
       - name: Prepare Environment and Run Tests
         env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DJANGO_SECRET: ${{ secrets.DJANGO_SECRET }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: A78J79Zh01
+          POSTGRES_DB: diplomka
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+        run: |
+          cd ./backend
+          mkdir -p auth_system
+          
+          # Create secrets.py with database configuration
+          echo "
+          SECRET_KEY = 'django-insecure-dummy-secret'
+          
+          DATABASES = {
+              'default': {
+                  'ENGINE': 'django.db.backends.postgresql',
+                  'NAME': '${{ env.POSTGRES_DB }}',
+                  'USER': '${{ env.POSTGRES_USER }}',
+                  'PASSWORD': '${{ env.POSTGRES_PASSWORD }}',
+                  'HOST': '${{ env.POSTGRES_HOST }}',
+                  'PORT': '${{ env.POSTGRES_PORT }}',
+              }
+          }
+          " > auth_system/secrets.py
+          
+          # Run specific tests as you do locally
+          python manage.py test accounts.tests
+
+      
+      - name: Check coverage
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GIST_ID: ${{ secrets.GIST_ID }}
+          
         run: |
           cd ./backend
           mkdir -p auth_system
@@ -155,25 +91,13 @@ jobs:
           # Create secrets.py safely
           echo "
           SECRET_KEY = '${{ secrets.DJANGO_SECRET }}'
-          
-          DATABASES = {
-              'default': {
-                  'ENGINE': 'django.db.backends.postgresql',
-                  'NAME': 'diplomka',
-                  'USER': 'postgres',
-                  'PASSWORD': '${{ secrets.DB_PASSWORD }}',
-                  'HOST': 'localhost',
-                  'PORT': '5432',
-              }
-          }
           " > auth_system/secrets.py
           
-          python manage.py test accounts.tests
-
-      - name: Check coverage
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_GIST_ID: ${{ secrets.GIST_ID }}
-        run: |
-          cd ./backend
+          # Create .env file for GitHub token and Gist ID
+          echo "GITHUB_TOKEN=${{ secrets.GH_TOKEN }}" > .env
+          echo "GITHUB_GIST_ID=${{ secrets.GIST_ID }}" >> .env
+          
+          # Run coverage script
           python coverage_cicd.py
+
+
