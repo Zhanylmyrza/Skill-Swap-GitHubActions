@@ -4,3 +4,8 @@ DB_NAME = "diplomka"
 DB_USER = "postgres"
 DB_PASSWORD = "A78J79Zh01"
 DB_HOST = "localhost"
+
+# DB_NAME = "diplomka"
+# DB_USER = "postgres"
+# DB_PASSWORD = "A78J79Zh01"
+# DB_HOST = "localhost"
